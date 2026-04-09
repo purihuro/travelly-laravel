@@ -1,0 +1,11 @@
+@extends('admin.layouts.app')
+@section('title', 'Rumah Makan')
+@section('page_title', 'Rumah Makan')
+@section('page_description', 'Kelola daftar rumah makan untuk layanan pemesanan kuliner customer.')
+@section('page_actions')
+  <a class="btn btn-primary" href="{{ route('admin.culinary-venues.create') }}">Tambah Rumah Makan</a>
+@endsection
+@section('content')
+<section class="panel" style="margin-bottom: 18px;"><div class="panel-body"><form method="GET" action="{{ route('admin.culinary-venues.index') }}" class="form-grid"><div class="field"><label for="search">Cari</label><input id="search" type="text" name="search" value="{{ request('search') }}" placeholder="Nama, slug, lokasi"></div><div class="field"><label for="status">Status</label><select id="status" name="status"><option value="">Semua status</option><option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option><option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Nonaktif</option></select></div><div class="field" style="justify-content:end;"><label>&nbsp;</label><div class="actions"><button class="btn btn-primary" type="submit">Filter</button><a class="btn btn-ghost" href="{{ route('admin.culinary-venues.index') }}">Reset</a></div></div></form></div></section>
+<section class="panel"><div class="panel-body"><div class="table-wrap"><table><thead><tr><th>Nama Rumah Makan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>@forelse ($culinaryVenues as $culinaryVenue)<tr><td><strong>{{ $culinaryVenue->name }}</strong><div class="muted">/{{ $culinaryVenue->slug }}</div></td><td><span class="badge {{ $culinaryVenue->is_active ? 'badge-success' : 'badge-neutral' }}">{{ $culinaryVenue->is_active ? 'Aktif' : 'Nonaktif' }}</span></td><td><div class="actions"><a class="btn btn-secondary" href="{{ route('admin.culinary-venues.edit', $culinaryVenue) }}">Edit</a><form method="POST" action="{{ route('admin.culinary-venues.destroy', $culinaryVenue) }}" onsubmit="return confirm('Hapus rumah makan ini?');" style="display:inline-flex;">@csrf @method('DELETE')<button class="btn btn-danger" type="submit">Delete</button></form></div></td></tr>@empty<tr><td colspan="3" class="muted">Belum ada data rumah makan.</td></tr>@endforelse</tbody></table></div><div class="pagination">{{ $culinaryVenues->links() }}</div></div></section>
+@endsection

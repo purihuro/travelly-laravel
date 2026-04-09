@@ -1,0 +1,13 @@
+[
+	{
+		"name": "localhost",
+		"host": "ftpupload.net",
+		"port": 21,
+		"type": "ftp",
+		"username": "if0_41613674",
+		"password": "3qZzHCboE5WUp",
+		"path": "/htdocs",
+		"autosave": true,
+		"confirm": true
+	}
+]

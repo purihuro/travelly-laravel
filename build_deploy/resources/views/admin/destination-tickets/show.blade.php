@@ -1,0 +1,12 @@
+@extends('admin.layouts.app')
+@section('title', 'Detail Tiket Wisata')
+@section('page_title', $destinationTicket->name)
+@section('page_description', 'Lihat detail destinasi tiket wisata dan histori penggunaannya di booking.')
+@section('page_actions')
+  <a class="btn btn-ghost" href="{{ route('admin.destination-tickets.edit', $destinationTicket) }}">Edit</a>
+  <a class="btn btn-secondary" href="{{ route('admin.destination-tickets.index') }}">Kembali</a>
+@endsection
+@section('content')
+<div class="split"><section class="panel"><div class="panel-body stack"><div><span class="muted">Nama Destinasi</span><br><strong>{{ $destinationTicket->name }}</strong></div><div><span class="muted">Slug</span><br>{{ $destinationTicket->slug }}</div><div><span class="muted">Lokasi</span><br>{{ $destinationTicket->location ?: '-' }}</div><div><span class="muted">Harga Tiket</span><br>${{ number_format((float) $destinationTicket->price, 2) }}</div><div><span class="muted">Urutan Tampil</span><br>{{ $destinationTicket->sort_order }}</div><div><span class="muted">Deskripsi</span><br>{{ $destinationTicket->description ?: '-' }}</div></div></section><section class="panel"><div class="panel-body stack">@if ($destinationTicket->image_url)<div><span class="muted">Gambar</span><br><img src="{{ $destinationTicket->image_url }}" alt="{{ $destinationTicket->name }}" style="margin-top:10px;width:100%;max-width:260px;height:220px;object-fit:cover;border-radius:16px;border:1px solid var(--line);"></div>@endif<div><span class="muted">Status</span><br><span class="badge {{ $destinationTicket->is_active ? 'badge-success' : 'badge-neutral' }}">{{ $destinationTicket->is_active ? 'Aktif' : 'Nonaktif' }}</span></div><div><span class="muted">Dipakai di Booking</span><br>{{ $destinationTicket->booking_destination_items_count }} kali</div></div></section></div>
+<section class="panel" style="margin-top: 18px;"><div class="panel-body"><h2 style="margin-top: 0;">Riwayat Booking Terbaru</h2><div class="table-wrap"><table><thead><tr><th>Kode Booking</th><th>Customer</th><th>Qty</th><th>Total</th></tr></thead><tbody>@forelse ($destinationTicket->bookingDestinationItems as $item)<tr><td>{{ $item->booking?->booking_code ?: '-' }}</td><td>{{ $item->booking?->customer_full_name ?: '-' }}</td><td>{{ $item->quantity }}</td><td>${{ number_format((float) $item->line_total, 2) }}</td></tr>@empty<tr><td colspan="4" class="muted">Belum ada histori booking untuk destinasi ini.</td></tr>@endforelse</tbody></table></div></div></section>
+@endsection

@@ -1,0 +1,85 @@
+CREATE TABLE travel_packages (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(150) NOT NULL UNIQUE,
+    title VARCHAR(150) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    summary TEXT NULL,
+    description LONGTEXT NULL,
+    featured_image VARCHAR(255) NULL,
+    base_price DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    sale_price DECIMAL(12,2) NULL,
+    duration_days INT UNSIGNED NOT NULL DEFAULT 1,
+    quota INT UNSIGNED NOT NULL DEFAULT 0,
+    location VARCHAR(150) NULL,
+    is_featured TINYINT(1) NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE blog_posts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(150) NOT NULL UNIQUE,
+    title VARCHAR(180) NOT NULL,
+    excerpt TEXT NULL,
+    content LONGTEXT NULL,
+    featured_image VARCHAR(255) NULL,
+    author_name VARCHAR(120) NOT NULL,
+    published_at DATETIME NULL,
+    is_published TINYINT(1) NOT NULL DEFAULT 0,
+    meta_title VARCHAR(180) NULL,
+    meta_description VARCHAR(255) NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bookings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    booking_code VARCHAR(50) NOT NULL UNIQUE,
+    customer_first_name VARCHAR(100) NOT NULL,
+    customer_last_name VARCHAR(100) NOT NULL,
+    customer_email VARCHAR(150) NOT NULL,
+    customer_phone VARCHAR(50) NOT NULL,
+    country VARCHAR(120) NULL,
+    city VARCHAR(120) NULL,
+    address_line_1 VARCHAR(180) NULL,
+    address_line_2 VARCHAR(180) NULL,
+    postal_code VARCHAR(20) NULL,
+    departure_date DATE NULL,
+    participants INT UNSIGNED NOT NULL DEFAULT 1,
+    payment_method VARCHAR(50) NOT NULL,
+    notes TEXT NULL,
+    subtotal DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    service_fee DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    total_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    booking_status VARCHAR(30) NOT NULL DEFAULT 'pending',
+    payment_status VARCHAR(30) NOT NULL DEFAULT 'unpaid',
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE booking_items (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    booking_id BIGINT UNSIGNED NOT NULL,
+    travel_package_id BIGINT UNSIGNED NOT NULL,
+    package_title VARCHAR(150) NOT NULL,
+    unit_price DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    line_total DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_booking_items_booking FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+    CONSTRAINT fk_booking_items_package FOREIGN KEY (travel_package_id) REFERENCES travel_packages(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE contact_messages (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(120) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    subject VARCHAR(180) NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'new',
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
